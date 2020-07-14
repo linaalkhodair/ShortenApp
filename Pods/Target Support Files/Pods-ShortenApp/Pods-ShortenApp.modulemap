@@ -1,0 +1,6 @@
+framework module Pods_ShortenApp {
+  umbrella header "Pods-ShortenApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
