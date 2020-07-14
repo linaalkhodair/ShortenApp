@@ -12,12 +12,12 @@ import SwiftyJSON
 class FirstViewController: UIViewController {
 
     @IBOutlet weak var destinationUrl: UITextField!
-    
     @IBOutlet weak var shortURL: UITextField!
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var paramField: UITextField!
     @IBOutlet weak var valueField: UITextField!
+    
+    var isUtm: Bool = false //variable to check if utms has been added
     
     var utms: [Utm] = []
     
@@ -35,6 +35,7 @@ class FirstViewController: UIViewController {
     
     
     @IBAction func addBtnTapped(_ sender: Any) {
+        isUtm = true
         insertUtmRow()
     }
     
@@ -73,7 +74,11 @@ class FirstViewController: UIViewController {
     func createAlias(){
         
             let apiKey = "e9896260-b45b-11ea-9ec4-b1aa9a0ed929" //later take it from credintials class
-            let longUrl = destinationUrl.text
+        
+            var longUrl = destinationUrl.text
+            if (isUtm) {
+                longUrl = addUtms(url: longUrl!)
+            }
             var url = "https://api.shorten.rest/aliases?aliasName=/@rnd"
             url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
             
@@ -111,7 +116,8 @@ class FirstViewController: UIViewController {
                     let json = JSON(jsonDict!)
                     print("new json",json)
                     
-                    if json["errorCode"].string != "" {
+                    let httpResponse = response as? HTTPURLResponse
+                    if (httpResponse?.statusCode == 400) {
                         
                         self.displayErrorMessages(errorCode: json["errorCode"].int!, errorMsg: json["errorMessage"].string!)
                     }
@@ -129,7 +135,7 @@ class FirstViewController: UIViewController {
                 } else {
                     //error with connection
                     print("error with connection")
-                    //--TODO-- show dialog?
+                    
                     Alert.showBasicAlert(on: self, with: "Something went wrong!", message: "There was a problem with the connection, make sure you have Wi-Fi or Cellular data turned on and try again.")
                 }
             }
@@ -138,6 +144,24 @@ class FirstViewController: UIViewController {
     
         
     } //end createAlias
+    
+    func addUtms(url: String) -> String {
+        
+        var queryItems: [URLQueryItem] = []
+        
+        for utm in utms {
+            queryItems.append(URLQueryItem(name: utm.parameter, value: utm.value))
+        }
+        
+        var urlComponents = URLComponents(string: url)
+        urlComponents?.queryItems = queryItems
+        let result = urlComponents?.url
+        print("RESULT OF UTMS-->",result!)
+        
+        return result!.absoluteString
+        
+    }
+    
     
     func displayErrorMessages(errorCode: Int, errorMsg: String){
         
