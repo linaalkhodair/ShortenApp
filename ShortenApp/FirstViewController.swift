@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Toast_Swift
 
 class FirstViewController: UIViewController {
 
@@ -16,18 +17,34 @@ class FirstViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var paramField: UITextField!
     @IBOutlet weak var valueField: UITextField!
+        
+    @IBOutlet weak var snippetPicker: UIPickerView!
+    
+    @IBOutlet weak var snippetField: UITextView!
     
     var isUtm: Bool = false //variable to check if utms has been added
     
     var utms: [Utm] = []
+    
+    var snippets = ["Google Analytics", "Facebook Pixel", "Google Conversion Pixel", "LinkedIn Pixel",
+    "Adroll Pixel", "Taboola Pixel", "Bing Pixel", "Pinterest Pixel", "Snapchat Pixel"
+    ]
+    
+    var snippetList = SnippetList(ID: "", parameterExample: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView(frame: CGRect.zero)
+        
+        snippetPicker.dataSource = self
+        snippetPicker.delegate = self
+        
+        
     }
 
+    
     @IBAction func shortenBtnClicked(_ sender: Any) {
             createAlias()
 
@@ -37,6 +54,11 @@ class FirstViewController: UIViewController {
     @IBAction func addBtnTapped(_ sender: Any) {
         isUtm = true
         insertUtmRow()
+    }
+    
+    @IBAction func copyTapped(_ sender: Any) {
+        UIPasteboard.general.string = shortURL.text
+        self.view.makeToast("Short URL is copied to clipboard.")
     }
     
     
@@ -74,7 +96,6 @@ class FirstViewController: UIViewController {
     func createAlias(){
         
             let apiKey = "e9896260-b45b-11ea-9ec4-b1aa9a0ed929" //later take it from credintials class
-        
             var longUrl = destinationUrl.text
             if (isUtm) {
                 longUrl = addUtms(url: longUrl!)
@@ -211,4 +232,25 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             tableView.endUpdates()
         }
     }
+}
+
+extension FirstViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    return 1 //number of columns
+}
+
+func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    return snippets.count
+}
+    
+func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    return snippets[row]
+}
+    
+func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print("selected::::",snippets[row])
+        let parameterExample = snippetList.getParameterExample(ID: snippets[row])
+        snippetField.text = parameterExample
+}
+
 }

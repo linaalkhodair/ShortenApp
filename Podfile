@@ -7,6 +7,7 @@ target 'ShortenApp' do
 
   # Pods for ShortenApp
   pod 'SwiftyJSON', '~> 4.0'
+  pod 'Toast-Swift', '~> 5.0.1'
 
   target 'ShortenAppTests' do
     inherit! :search_paths
