@@ -24,6 +24,8 @@
 		E9D198F424BDB40900FAEE95 /* UtmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198F324BDB40900FAEE95 /* UtmCell.swift */; };
 		E9D198F624BDBC8000FAEE95 /* Utm.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198F524BDBC8000FAEE95 /* Utm.swift */; };
 		E9D198F824BF7C5400FAEE95 /* SnippetList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198F724BF7C5400FAEE95 /* SnippetList.swift */; };
+		E9D198FA24C076AC00FAEE95 /* SnippetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198F924C076AC00FAEE95 /* SnippetCell.swift */; };
+		E9D198FC24C076D000FAEE95 /* Snippet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198FB24C076D000FAEE95 /* Snippet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +75,8 @@
 		E9D198F324BDB40900FAEE95 /* UtmCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtmCell.swift; sourceTree = "<group>"; };
 		E9D198F524BDBC8000FAEE95 /* Utm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utm.swift; sourceTree = "<group>"; };
 		E9D198F724BF7C5400FAEE95 /* SnippetList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetList.swift; sourceTree = "<group>"; };
+		E9D198F924C076AC00FAEE95 /* SnippetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetCell.swift; sourceTree = "<group>"; };
+		E9D198FB24C076D000FAEE95 /* Snippet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snippet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +168,8 @@
 				E9D198F324BDB40900FAEE95 /* UtmCell.swift */,
 				E9D198F524BDBC8000FAEE95 /* Utm.swift */,
 				E9D198F724BF7C5400FAEE95 /* SnippetList.swift */,
+				E9D198F924C076AC00FAEE95 /* SnippetCell.swift */,
+				E9D198FB24C076D000FAEE95 /* Snippet.swift */,
 			);
 			path = ShortenApp;
 			sourceTree = "<group>";
@@ -432,7 +438,9 @@
 				E9D198C424BB1A1A00FAEE95 /* SecondViewController.swift in Sources */,
 				E9D198C224BB1A1A00FAEE95 /* FirstViewController.swift in Sources */,
 				E9D198F024BD98C300FAEE95 /* Credentials.swift in Sources */,
+				E9D198FA24C076AC00FAEE95 /* SnippetCell.swift in Sources */,
 				E9D198BE24BB1A1A00FAEE95 /* AppDelegate.swift in Sources */,
+				E9D198FC24C076D000FAEE95 /* Snippet.swift in Sources */,
 				E9D198C024BB1A1A00FAEE95 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

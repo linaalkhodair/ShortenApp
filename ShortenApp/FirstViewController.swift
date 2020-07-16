@@ -14,19 +14,27 @@ class FirstViewController: UIViewController {
 
     @IBOutlet weak var destinationUrl: UITextField!
     @IBOutlet weak var shortURL: UITextField!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var utmTableView: UITableView!
     @IBOutlet weak var paramField: UITextField!
     @IBOutlet weak var valueField: UITextField!
         
     @IBOutlet weak var snippetPicker: UIPickerView!
     
-    @IBOutlet weak var snippetField: UITextView!
+    @IBOutlet weak var snippetTableView: UITableView!
+//    @IBOutlet weak var snippetIdField: UILabel!
+//    @IBOutlet weak var snippetField: UITextView!
+    
     
     var isUtm: Bool = false //variable to check if utms has been added
+    var isSnippet: Bool = false
     
     var utms: [Utm] = []
+    var snippetCells: [Snippet] = []
     
-    var snippets = ["Google Analytics", "Facebook Pixel", "Google Conversion Pixel", "LinkedIn Pixel",
+    var snippetId: String = ""
+    var snippetParameter: String = ""
+    
+    var snippets = ["Select Snippet","Google Analytics", "Facebook Pixel", "Google Conversion Pixel", "LinkedIn Pixel",
     "Adroll Pixel", "Taboola Pixel", "Bing Pixel", "Pinterest Pixel", "Snapchat Pixel"
     ]
     
@@ -34,9 +42,15 @@ class FirstViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        utmTableView.dataSource = self
+        utmTableView.delegate = self
+        utmTableView.tableFooterView = UIView(frame: CGRect.zero)
+        
+        snippetTableView.dataSource = self
+        snippetTableView.delegate = self
+        //snippetTableView.tableFooterView = UIView(frame: CGRect.zero)
+//        utmTableView.reloadData()
+//        snippetTableView.reloadData()
         
         snippetPicker.dataSource = self
         snippetPicker.delegate = self
@@ -44,6 +58,11 @@ class FirstViewController: UIViewController {
         
     }
 
+    @IBAction func addSnippet(_ sender: Any) {
+        isSnippet = true
+        insertSnippetRow()
+//        snippetField.isHidden = false
+    }
     
     @IBAction func shortenBtnClicked(_ sender: Any) {
             createAlias()
@@ -61,6 +80,20 @@ class FirstViewController: UIViewController {
         self.view.makeToast("Short URL is copied to clipboard.")
     }
     
+    func insertSnippetRow(){
+        
+        let snippet = Snippet(snippetID: snippetId, parameterExample: snippetParameter)
+        snippetCells.append(snippet)
+        
+        let indexPath = IndexPath(row: snippetCells.count - 1, section: 0)
+        print(indexPath)
+        snippetTableView.beginUpdates()
+        snippetTableView.insertRows(at: [indexPath], with: .automatic)
+        snippetTableView.endUpdates()
+
+        view.endEditing(true)
+        
+    }
     
     func insertUtmRow() {
             
@@ -69,7 +102,7 @@ class FirstViewController: UIViewController {
         var isValid = true
         
         if param.isEmpty || value.isEmpty {
-            Alert.showBasicAlert(on: self, with: "Missing Field!", message: "Please fill in all UTM fields and try  again")
+            Alert.showBasicAlert(on: self, with: "Missing Field!", message: "Please fill in all UTM fields and try again")
             isValid = false
         }
         
@@ -81,9 +114,9 @@ class FirstViewController: UIViewController {
             
             let indexPath = IndexPath(row: utms.count - 1, section: 0)
             
-            tableView.beginUpdates()
-            tableView.insertRows(at: [indexPath], with: .automatic)
-            tableView.endUpdates()
+            utmTableView.beginUpdates()
+            utmTableView.insertRows(at: [indexPath], with: .automatic)
+            utmTableView.endUpdates()
             
             paramField.text = ""
             valueField.text = ""
@@ -189,7 +222,6 @@ class FirstViewController: UIViewController {
         //maybe later i can create switch with  all error codes..
         Alert.showBasicAlert(on: self, with: "Something went wrong!", message: "\(errorMsg), please try again.")
         
-        
     }
     
 }
@@ -197,20 +229,44 @@ class FirstViewController: UIViewController {
 extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return utms.count
+        
+        switch tableView {
+        case utmTableView:
+            return utms.count
+            
+        case snippetTableView:
+            return snippetCells.count
+            
+        default:
+            return 1
+        }
+        
+        return 1
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let utm = utms[indexPath.row]
-
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UtmCell") as! UtmCell
-        cell.paramField.text = utm.parameter
-        cell.valueField.text = utm.value
         
+        switch tableView {
+        case utmTableView:
+            let utm = utms[indexPath.row]
 
-        return cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UtmCell") as! UtmCell
+            cell.paramField.text = utm.parameter
+            cell.valueField.text = utm.value
+            
+            return cell
+        case snippetTableView:
+            let snippet = snippetCells[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "snippetCell") as! SnippetCell
+            cell.snippetId.text = snippet.snippetID
+            cell.snippetParameter.text = snippet.parameterExample
+            return cell
+        
+        default:
+            return UITableViewCell()
+        }
+
+        return UITableViewCell()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -225,12 +281,25 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            utms.remove(at: indexPath.row)
             
-            tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            tableView.endUpdates()
-        }
+            switch tableView {
+            case utmTableView:
+                utms.remove(at: indexPath.row) //anther table view
+                utmTableView.beginUpdates()
+                utmTableView.deleteRows(at: [indexPath], with: .automatic)
+                utmTableView.endUpdates()
+            
+            case snippetTableView:
+                snippetCells.remove(at: indexPath.row) //anther table view
+                
+                snippetTableView.beginUpdates()
+                snippetTableView.deleteRows(at: [indexPath], with: .automatic)
+                snippetTableView.endUpdates()
+            default: break
+                
+            } //end switch
+
+        } //end if
     }
 }
 
@@ -250,7 +319,9 @@ func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent c
 func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print("selected::::",snippets[row])
         let parameterExample = snippetList.getParameterExample(ID: snippets[row])
-        snippetField.text = parameterExample
+    
+        snippetId = snippets[row]
+        snippetParameter = parameterExample
 }
 
 }
