@@ -9,7 +9,6 @@
 import UIKit
 import SwiftyJSON
 import Toast_Swift
-import Alamofire
 
 class FirstViewController: UIViewController {
 
@@ -22,10 +21,7 @@ class FirstViewController: UIViewController {
     @IBOutlet weak var snippetPicker: UIPickerView!
     
     @IBOutlet weak var snippetTableView: UITableView!
-//    @IBOutlet weak var snippetIdField: UILabel!
-//    @IBOutlet weak var snippetField: UITextView!
-    
-    
+        
     var isUtm: Bool = false //variable to check if utms has been added
     var isSnippet: Bool = false
     
