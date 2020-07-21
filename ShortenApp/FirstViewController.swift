@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import Toast_Swift
+import Alamofire
 
 class FirstViewController: UIViewController {
 
@@ -34,8 +35,8 @@ class FirstViewController: UIViewController {
     var snippetId: String = ""
     var snippetParameter: String = ""
     
-    var snippets = ["Select Snippet","Google Analytics", "Facebook Pixel", "Google Conversion Pixel", "LinkedIn Pixel",
-    "Adroll Pixel", "Taboola Pixel", "Bing Pixel", "Pinterest Pixel", "Snapchat Pixel"
+    var snippets = ["Select Snippet","GoogleAnalytics", "FacebookPixel", "GoogleConversionPixel", "LinkedInPixel",
+    "AdrollPixel", "TaboolaPixel", "BingPixel", "PinterestPixel", "SnapchatPixel"
     ]
     
     var snippetList = SnippetList(ID: "", parameterExample: "")
@@ -60,8 +61,9 @@ class FirstViewController: UIViewController {
 
     @IBAction func addSnippet(_ sender: Any) {
         isSnippet = true
+        if (snippetId != "Select Snippet") {
         insertSnippetRow()
-//        snippetField.isHidden = false
+        }
     }
     
     @IBAction func shortenBtnClicked(_ sender: Any) {
@@ -140,8 +142,10 @@ class FirstViewController: UIViewController {
             urlRequest.httpMethod = "POST"
             urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key") //maybe set?
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
+            
+            let test = "[\"trackingId\": \"YOUR_TRACKING_ID\", \"event\": \"YOUR_EVENT\"]"
             let parameter = [
+                
                 "destinations": [
                     [
                         "url": longUrl,
@@ -149,10 +153,26 @@ class FirstViewController: UIViewController {
                         "os": ""
                     ]
                 ]
+            ,
+                "snippets": [
+                    [
+                        "id": "GoogleAnalytics",
+                        "parameters": [
+                            "trackingId": "YOUR_TRACKING_ID",
+                            "event": "YOUR_EVENT"
+                        
+                        ]
+                    
+                    ]
+                ]
             ]
-        
+            let result = getSnippetDict(longUrl: longUrl!)
+
             print(parameter)
-            guard let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: []) else { return }
+        
+            
+            guard let httpBody = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else { return }
+            
             urlRequest.httpBody = httpBody
             
             
@@ -171,7 +191,7 @@ class FirstViewController: UIViewController {
                     print("new json",json)
                     
                     let httpResponse = response as? HTTPURLResponse
-                    if (httpResponse?.statusCode == 400) {
+                    if (httpResponse?.statusCode != 200) {
                         
                         self.displayErrorMessages(errorCode: json["errorCode"].int!, errorMsg: json["errorMessage"].string!)
                     }
@@ -198,6 +218,55 @@ class FirstViewController: UIViewController {
     
         
     } //end createAlias
+    
+    func getSnippetDict(longUrl: String) -> [String : [Any]] {
+        
+        var parameter = [
+            
+            "destinations": [
+                [
+                    "url": longUrl,
+                    "country": "",
+                    "os": ""
+                ]
+            ]
+        ,
+            "snippets": [
+
+               ]
+
+        ] as  [String : [[String : Any]]]
+        
+        for snippet in snippetCells {
+            
+            var idk = snippet.parameterExample.replacingOccurrences(of: "{", with: "")
+            idk = idk.replacingOccurrences(of: "}", with: "")
+            idk = idk.replacingOccurrences(of: "\n", with: "")
+            idk = idk.replacingOccurrences(of: "\"", with: "")
+        
+        let components = idk.components(separatedBy: ",")
+
+        var dictionary: [String : String] = [:]
+        var dict = [
+            "id": snippet.snippetID,
+            "parameters": [
+            
+            ]
+            ] as [String : Any]
+        for component in components{
+          let pair = component.components(separatedBy: ":")
+          dictionary[pair[0]] = pair[1]
+            
+        }
+        
+        dict["parameters"] = dictionary
+        
+        parameter["snippets"] = [dict]
+            
+        }
+        print("INSIDE->",parameter)
+        return parameter
+    }
     
     func addUtms(url: String) -> String {
         
