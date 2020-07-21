@@ -24,7 +24,7 @@ class SnippetList {
                        parameterExample = "{\n\"trackingId\":\"YOUR_TRACKING_ID\",\n\"event\":\"YOUR_EVENT\"\n}"
                        
         case "FacebookPixel":
-                       parameterExample = "{\n \"id\":\"YOUR_ID\",\n\"event\":\"EVENT_NAME\"\n}"
+                       parameterExample = "{\n\"id\":\"YOUR_ID\",\n\"event\":\"EVENT_NAME\"\n}"
                        
         case "GoogleConversionPixel":
                        parameterExample = "{\n\"conversionId\":\"YOUR_CONVERSION_ID\",\n\"gtagConversionEvent\":{\n\"sendTo\": \"INSERT_SENDTO\",\n\"value\":\"1.0\",\n\"currency\":\"USD\"\n}\n}"

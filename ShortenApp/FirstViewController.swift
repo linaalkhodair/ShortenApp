@@ -142,39 +142,12 @@ class FirstViewController: UIViewController {
             urlRequest.httpMethod = "POST"
             urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key") //maybe set?
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            let test = "[\"trackingId\": \"YOUR_TRACKING_ID\", \"event\": \"YOUR_EVENT\"]"
-            let parameter = [
-                
-                "destinations": [
-                    [
-                        "url": longUrl,
-                        "country": "",
-                        "os": ""
-                    ]
-                ]
-            ,
-                "snippets": [
-                    [
-                        "id": "GoogleAnalytics",
-                        "parameters": [
-                            "trackingId": "YOUR_TRACKING_ID",
-                            "event": "YOUR_EVENT"
-                        
-                        ]
-                    
-                    ]
-                ]
-            ]
-            let result = getSnippetDict(longUrl: longUrl!)
 
-            print(parameter)
-        
+            let result = getSnippetDict(longUrl: longUrl!)
             
             guard let httpBody = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else { return }
             
             urlRequest.httpBody = httpBody
-            
             
             let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
                 
@@ -236,18 +209,19 @@ class FirstViewController: UIViewController {
                ]
 
         ] as  [String : [[String : Any]]]
+        var array = [Dictionary<String, Any>]()
         
         for snippet in snippetCells {
             
-            var idk = snippet.parameterExample.replacingOccurrences(of: "{", with: "")
-            idk = idk.replacingOccurrences(of: "}", with: "")
-            idk = idk.replacingOccurrences(of: "\n", with: "")
-            idk = idk.replacingOccurrences(of: "\"", with: "")
+            var cleanParam = snippet.parameterExample.replacingOccurrences(of: "{", with: "")
+            cleanParam = cleanParam.replacingOccurrences(of: "}", with: "")
+            cleanParam = cleanParam.replacingOccurrences(of: "\n", with: "")
+            cleanParam = cleanParam.replacingOccurrences(of: "\"", with: "")
         
-        let components = idk.components(separatedBy: ",")
+        let components = cleanParam.components(separatedBy: ",")
 
         var dictionary: [String : String] = [:]
-        var dict = [
+         var dict = [
             "id": snippet.snippetID,
             "parameters": [
             
@@ -258,15 +232,16 @@ class FirstViewController: UIViewController {
           dictionary[pair[0]] = pair[1]
             
         }
-        
-        dict["parameters"] = dictionary
-        
-        parameter["snippets"] = [dict]
+            dict["parameters"] = dictionary
+            array.append(dict)
+
             
-        }
+        } //end for loop
+        parameter["snippets"] = array
         print("INSIDE->",parameter)
         return parameter
     }
+    
     
     func addUtms(url: String) -> String {
         
