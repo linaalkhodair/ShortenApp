@@ -257,6 +257,7 @@ class FirstViewController: UIViewController {
     }
     
     
+    
     func displayErrorMessages(errorCode: Int, errorMsg: String){
         
         //maybe later i can create switch with  all error codes..
