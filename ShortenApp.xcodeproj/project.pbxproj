@@ -10,6 +10,7 @@
 		43353A125F12F8B0495136AA /* Pods_ShortenAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDC1808C337B5B78C47CA55 /* Pods_ShortenAppTests.framework */; };
 		76ACE3B4AA1438651EEB0899 /* Pods_ShortenApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A503541139FB5126EE4EC820 /* Pods_ShortenApp.framework */; };
 		8E4610F0B80AA4D63A3B0F45 /* Pods_ShortenApp_ShortenAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85F2E06B459E2CBCC2E40196 /* Pods_ShortenApp_ShortenAppUITests.framework */; };
+		E9AA232024C97D1800623FB8 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA231F24C97D1800623FB8 /* SettingsViewController.swift */; };
 		E9D198BE24BB1A1A00FAEE95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198BD24BB1A1A00FAEE95 /* AppDelegate.swift */; };
 		E9D198C024BB1A1A00FAEE95 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198BF24BB1A1A00FAEE95 /* SceneDelegate.swift */; };
 		E9D198C224BB1A1A00FAEE95 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D198C124BB1A1A00FAEE95 /* FirstViewController.swift */; };
@@ -55,6 +56,7 @@
 		B3DE0E4003D93C763319C439 /* Pods-ShortenAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShortenAppTests.release.xcconfig"; path = "Target Support Files/Pods-ShortenAppTests/Pods-ShortenAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		BEDC1808C337B5B78C47CA55 /* Pods_ShortenAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShortenAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8E8AE216F47FD3A9E0CAAEB /* Pods-ShortenAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShortenAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ShortenAppTests/Pods-ShortenAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E9AA231F24C97D1800623FB8 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E9D198BA24BB1A1A00FAEE95 /* ShortenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShortenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9D198BD24BB1A1A00FAEE95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E9D198BF24BB1A1A00FAEE95 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				E9D198BF24BB1A1A00FAEE95 /* SceneDelegate.swift */,
 				E9D198C124BB1A1A00FAEE95 /* FirstViewController.swift */,
 				E9D198C324BB1A1A00FAEE95 /* SecondViewController.swift */,
+				E9AA231F24C97D1800623FB8 /* SettingsViewController.swift */,
 				E9D198C524BB1A1A00FAEE95 /* Main.storyboard */,
 				E9D198C824BB1A1F00FAEE95 /* Assets.xcassets */,
 				E9D198CA24BB1A1F00FAEE95 /* LaunchScreen.storyboard */,
@@ -442,6 +445,7 @@
 				E9D198BE24BB1A1A00FAEE95 /* AppDelegate.swift in Sources */,
 				E9D198FC24C076D000FAEE95 /* Snippet.swift in Sources */,
 				E9D198C024BB1A1A00FAEE95 /* SceneDelegate.swift in Sources */,
+				E9AA232024C97D1800623FB8 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
