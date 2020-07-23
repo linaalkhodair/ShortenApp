@@ -7,24 +7,51 @@
 //
 
 import UIKit
+import Toast_Swift
 
 class SettingsViewController: UIViewController {
-
+    
+    @IBOutlet weak var apiKeyField: UITextField!
+    @IBOutlet weak var domainField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let api = UserDefaults.standard.string(forKey: "apiKey") ?? "Not set"
+        
+        if (api != "Not set") {
+            apiKeyField.text = UserDefaults.standard.string(forKey: "apiKey")
+            domainField.text = UserDefaults.standard.string(forKey: "domain")
+        }
+        
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func saveBtnTapped(_ sender: Any) {
+        
+        let apiKey = apiKeyField.text
+        var domain = domainField.text
+        
+        if (apiKey!.isEmpty) {
+            Alert.showBasicAlert(on: self, with: "Something went wrng!", message: "Please fill in API Key field and try again.")
+        } else {
+            if (domain!.isEmpty){
+                domain = "short.fyi"
+            }
+        saveUserCredentials(apiKey: apiKey!, domain: domain!)
+        }
+        
     }
-    */
-
+    
+    func saveUserCredentials(apiKey: String, domain: String) {
+        
+        UserDefaults.standard.set(apiKey, forKey: "apiKey")
+        UserDefaults.standard.set(domain, forKey: "domain")
+        DispatchQueue.main.async {
+            self.view.makeToast("Settings saved successfully.")
+        }
+        
+        
+    }
+    
 }

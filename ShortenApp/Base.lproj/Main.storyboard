@@ -870,6 +870,9 @@
                                 <state key="normal" title="Save" backgroundImage="buttonBackground">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="saveBtnTapped:" destination="VkE-3f-NfL" eventType="touchUpInside" id="ZtL-2g-9W9"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -901,6 +904,10 @@
                         <viewLayoutGuide key="safeArea" id="XJ6-cf-KXF"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="gear" catalog="system" id="0qd-u4-ynP"/>
+                    <connections>
+                        <outlet property="apiKeyField" destination="igH-CB-iVE" id="7wM-fq-M6i"/>
+                        <outlet property="domainField" destination="zz1-Gi-8ya" id="xbW-eh-5oS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0gg-oz-yOf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
