@@ -35,6 +35,8 @@ class SecondViewController: UIViewController {
     
     var snippetList = SnippetList(ID: "", parameterExample: "")
 
+    var aliasName: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -117,14 +119,14 @@ class SecondViewController: UIViewController {
     }
     
     func getAliasName(shortUrl: String) -> String {
-        var aliasName = shortUrl
-        aliasName = aliasName.replacingOccurrences(of: "https://", with: "")
+        var alias = shortUrl
+        alias = alias.replacingOccurrences(of: "https://", with: "")
         print("ALIAS NAME:",aliasName)
-        
         var len = domain.text?.count
         
         let domainName = "short.fyi"
-        aliasName = aliasName.replacingOccurrences(of: domainName+"/", with: "")
+        alias = alias.replacingOccurrences(of: domainName+"/", with: "")
+        self.aliasName = alias
         return aliasName
         
     }
@@ -164,7 +166,11 @@ class SecondViewController: UIViewController {
                 
                     let destination = json["destinations"][0]["url"].string!
                     let domainName = json["domainName"].string!
+                    let snippets = json["snippets"].array
+                    print("SNIPPETs--->",snippets)
+                    
                     self.getUtms(url: destination)
+                    self.getSnippets(snippetsArray: snippets!)
                     DispatchQueue.main.async {
                         self.destinationUrl.text = destination
                         self.domain.text = domainName
@@ -187,7 +193,6 @@ class SecondViewController: UIViewController {
     }
     
     func displayErrorMessages(errorCode: Int, errorMsg: String){
-        
         //maybe later i can create switch with  all error codes..
         Alert.showBasicAlert(on: self, with: "Something went wrong!", message: "\(errorMsg), please try again.")
         
@@ -205,11 +210,12 @@ class SecondViewController: UIViewController {
         
         let queryItems = components!.queryItems
         //we have a problem when the url is from the extension :/
+        if queryItems != nil {
         for queryItem in queryItems! {
             let utm = Utm(parameter: queryItem.name, value: queryItem.value!)
             insertUtmRow(utm: utm)
+            }
         }
-        
         //remove all url components so when we save changes we start in clean slate lol
         components?.queryItems = []
         DispatchQueue.main.async {
@@ -239,6 +245,170 @@ class SecondViewController: UIViewController {
         insertUtmRow()
     }
     
+    func getSnippets(snippetsArray: [JSON]) {
+        DispatchQueue.main.async {
+            self.snippetTableView.beginUpdates()
+        }
+        for snippet in snippetsArray {
+            let id = snippet["id"].string!
+            let parameters = snippet["parameters"].dictionary
+            let resultSnip = Snippet(snippetID: id, parameterExample: parameters!.description)
+            insertSnippetRow(snippet: resultSnip)
+        }
+        DispatchQueue.main.async {
+            self.snippetTableView.endUpdates()
+        }
+        //delete all snippets from url so we add them when updating from snippetscells
+        
+        
+    }
+    
+    func insertSnippetRow(snippet: Snippet){
+        
+        snippetCells.append(snippet)
+        
+        let indexPath = IndexPath(row: snippetCells.count - 1, section: 0)
+        print(indexPath)
+        DispatchQueue.main.async {
+            self.snippetTableView.beginUpdates()
+            self.snippetTableView.insertRows(at: [indexPath], with: .automatic)
+            self.snippetTableView.endUpdates()
+
+            self.view.endEditing(true)
+        }
+
+        
+    }
+    
+    
+    @IBAction func saveBtnTapped(_ sender: Any) {
+        editAlias(aliasName: aliasName)
+    }
+    
+    func editAlias(aliasName: String) {
+        
+        let apiKey = "e9896260-b45b-11ea-9ec4-b1aa9a0ed929" //later take it from credintials class
+        var longUrl = destinationUrl.text
+        if (isUtm) {
+            longUrl = addUtms(url: longUrl!)
+        }
+        var url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" //if there is a domain name not short.fyi url is changed
+        url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        
+        var urlRequest = URLRequest(url: URL(string: url)!)
+        urlRequest.httpMethod = "PUT"
+        urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key") //maybe set?
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let result = getSnippetDict(longUrl: longUrl!)
+        
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: result, options: .prettyPrinted) else { return }
+        
+        urlRequest.httpBody = httpBody
+        
+        let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            
+            if let response = response {
+                print(response)
+            }
+            
+            if error == nil {
+                
+                let jsonDict = try? JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                print("json == \(String(describing: jsonDict))")
+                
+                let httpResponse = response as? HTTPURLResponse
+                if (httpResponse?.statusCode != 200) {
+                    let json = JSON(jsonDict!)
+                    print("new json",json)
+                    self.displayErrorMessages(errorCode: json["errorCode"].int!, errorMsg: json["errorMessage"].string!)
+                }
+                
+                else {
+                    //toast
+                    DispatchQueue.main.async {
+                        self.view.makeToast("Short URL is updated successfully!")
+                    }
+                }
+                
+            } else {
+                //error with connection
+                print("error with connection")
+                
+                Alert.showBasicAlert(on: self, with: "Something went wrong!", message: "There was a problem with the connection, make sure you have Wi-Fi or Cellular data turned on and try again.")
+            }
+        }
+        
+        task.resume()
+        
+    }
+
+    func addUtms(url: String) -> String {
+        
+        var queryItems: [URLQueryItem] = []
+        
+        for utm in utms {
+            queryItems.append(URLQueryItem(name: utm.parameter, value: utm.value))
+        }
+        
+        var urlComponents = URLComponents(string: url)
+        urlComponents?.queryItems = queryItems
+        let result = urlComponents?.url
+        print("RESULT OF UTMS-->",result!)
+        
+        return result!.absoluteString
+        
+    }
+
+    func getSnippetDict(longUrl: String) -> [String : [Any]] {
+        
+        var parameter = [
+            
+            "destinations": [
+                [
+                    "url": longUrl,
+                    "country": "",
+                    "os": ""
+                ]
+            ]
+        ,
+            "snippets": [
+
+               ]
+
+        ] as  [String : [[String : Any]]]
+        var array = [Dictionary<String, Any>]()
+        
+        for snippet in snippetCells {
+            
+            var cleanParam = snippet.parameterExample.replacingOccurrences(of: "{", with: "")
+            cleanParam = cleanParam.replacingOccurrences(of: "}", with: "")
+            cleanParam = cleanParam.replacingOccurrences(of: "\n", with: "")
+            cleanParam = cleanParam.replacingOccurrences(of: "\"", with: "")
+        
+        let components = cleanParam.components(separatedBy: ",")
+
+        var dictionary: [String : String] = [:]
+         var dict = [
+            "id": snippet.snippetID,
+            "parameters": [
+            
+            ]
+            ] as [String : Any]
+        for component in components{
+          let pair = component.components(separatedBy: ":")
+          dictionary[pair[0]] = pair[1]
+            
+        }
+            dict["parameters"] = dictionary
+            array.append(dict)
+
+            
+        } //end for loop
+        parameter["snippets"] = array
+        print("INSIDE->",parameter)
+        return parameter
+    }
     
 } //end SecondViewController
 

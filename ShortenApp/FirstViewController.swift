@@ -21,7 +21,10 @@ class FirstViewController: UIViewController {
     @IBOutlet weak var snippetPicker: UIPickerView!
     
     @IBOutlet weak var snippetTableView: UITableView!
-        
+    @IBOutlet weak var extraView: UIView!
+    @IBOutlet weak var plusSign: UIImageView!
+    @IBOutlet weak var minusSign: UIImageView!
+    
     var isUtm: Bool = false //variable to check if utms has been added
     var isSnippet: Bool = false
     
@@ -45,16 +48,32 @@ class FirstViewController: UIViewController {
         
         snippetTableView.dataSource = self
         snippetTableView.delegate = self
-        //snippetTableView.tableFooterView = UIView(frame: CGRect.zero)
-//        utmTableView.reloadData()
-//        snippetTableView.reloadData()
+        snippetTableView.tableFooterView = UIView(frame: CGRect.zero)
         
         snippetPicker.dataSource = self
         snippetPicker.delegate = self
         
+        extraView.isHidden = true //hidden
+        
         
     }
 
+    @IBAction func expandBtn(_ sender: Any) {
+        
+        if (extraView.isHidden) {
+            extraView.isHidden = false
+            plusSign.isHidden = true
+            minusSign.isHidden = false
+        }
+        else {
+            extraView.isHidden = true
+            plusSign.isHidden = false
+            minusSign.isHidden = true
+        }
+        
+    }
+    
+    
     @IBAction func addSnippet(_ sender: Any) {
         isSnippet = true
         if (snippetId != "Select Snippet") {
