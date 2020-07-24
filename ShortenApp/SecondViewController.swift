@@ -37,6 +37,9 @@ class SecondViewController: UIViewController {
 
     var aliasName: String = ""
     
+    let apiKey = UserDefaults.standard.string(forKey: "apiKey")
+    let domainName = UserDefaults.standard.string(forKey: "domain")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -122,10 +125,9 @@ class SecondViewController: UIViewController {
         var alias = shortUrl
         alias = alias.replacingOccurrences(of: "https://", with: "")
         print("ALIAS NAME:",aliasName)
-        var len = domain.text?.count
+        var len = domainName?.count //check android version
         
-        let domainName = "short.fyi"
-        alias = alias.replacingOccurrences(of: domainName+"/", with: "")
+        alias = alias.replacingOccurrences(of: domainName!+"/", with: "")
         self.aliasName = alias
         return aliasName
         
@@ -133,13 +135,12 @@ class SecondViewController: UIViewController {
     
     func getAlias(aliasName: String){
         
-        let apiKey = "e9896260-b45b-11ea-9ec4-b1aa9a0ed929" //later take it from credintials class
         var url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" //if domain not short, url must contain domainName ---TODO---
         url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         var urlRequest = URLRequest(url: URL(string: url)!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key")
+        urlRequest.addValue(apiKey!, forHTTPHeaderField: "x-api-key")
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
@@ -287,17 +288,16 @@ class SecondViewController: UIViewController {
     
     func editAlias(aliasName: String) {
         
-        let apiKey = "e9896260-b45b-11ea-9ec4-b1aa9a0ed929" //later take it from credintials class
         var longUrl = destinationUrl.text
         if (isUtm) {
             longUrl = addUtms(url: longUrl!)
         }
-        var url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" //if there is a domain name not short.fyi url is changed
+        var url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" //if there is a domain name not short.fyi url is changed--TODO--
         url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         var urlRequest = URLRequest(url: URL(string: url)!)
         urlRequest.httpMethod = "PUT"
-        urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key") //maybe set?
+        urlRequest.addValue(apiKey!, forHTTPHeaderField: "x-api-key") //maybe set?
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let result = getSnippetDict(longUrl: longUrl!)

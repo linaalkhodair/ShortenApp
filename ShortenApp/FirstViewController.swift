@@ -40,6 +40,9 @@ class FirstViewController: UIViewController {
     
     var snippetList = SnippetList(ID: "", parameterExample: "")
     
+    let apiKey = UserDefaults.standard.string(forKey: "apiKey")
+    let domainName = UserDefaults.standard.string(forKey: "domain")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         utmTableView.dataSource = self
@@ -145,7 +148,6 @@ class FirstViewController: UIViewController {
     
     func createAlias(){
         
-            let apiKey = "e9896260-b45b-11ea-9ec4-b1aa9a0ed929" //later take it from credintials class
             var longUrl = destinationUrl.text
             if (isUtm) {
                 longUrl = addUtms(url: longUrl!)
@@ -155,7 +157,7 @@ class FirstViewController: UIViewController {
             
             var urlRequest = URLRequest(url: URL(string: url)!)
             urlRequest.httpMethod = "POST"
-            urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key") //maybe set?
+            urlRequest.addValue(apiKey!, forHTTPHeaderField: "x-api-key") //maybe set?
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
             let result = getSnippetDict(longUrl: longUrl!)
