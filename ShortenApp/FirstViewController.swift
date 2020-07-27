@@ -24,6 +24,8 @@ class FirstViewController: UIViewController {
     @IBOutlet weak var extraView: UIView!
     @IBOutlet weak var plusSign: UIImageView!
     @IBOutlet weak var minusSign: UIImageView!
+    @IBOutlet weak var extraViewHeader: UILabel!
+    
     
     var isUtm: Bool = false //variable to check if utms has been added
     var isSnippet: Bool = false
