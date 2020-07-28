@@ -60,6 +60,7 @@ class SecondViewController: UIViewController {
         
         saveBtn.isHidden = true
         extraView.isHidden = true
+        self.hideKeyboard()
         
     }
     
@@ -518,3 +519,4 @@ func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent c
 }
 
 }
+

@@ -59,6 +59,7 @@ class FirstViewController: UIViewController {
         snippetPicker.delegate = self
         
         extraView.isHidden = true //hidden
+        self.hideKeyboard()
         
         
     }
@@ -388,4 +389,14 @@ func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent c
         snippetParameter = parameterExample
 }
 
+}
+//to dismiss keyboard when tapping anywhere
+extension UIViewController{
+    func hideKeyboard (){
+        let Tap:UITapGestureRecognizer = UITapGestureRecognizer (target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(Tap)
+    }
+    @objc func dismissKeyboard () {
+        view.endEditing(true)
+    }
 }

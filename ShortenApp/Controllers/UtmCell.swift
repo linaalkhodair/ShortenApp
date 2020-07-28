@@ -14,6 +14,4 @@ class UtmCell: UITableViewCell {
     @IBOutlet weak var valueField: UITextField!
     @IBOutlet weak var equalLabel: UILabel!
     
-
-
 }

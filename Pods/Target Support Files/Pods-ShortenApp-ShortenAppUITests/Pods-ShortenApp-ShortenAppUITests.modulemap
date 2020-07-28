@@ -1,4 +1,4 @@
-framework module Pods_ShortenApp_ShortenAppUITests {
+module Pods_ShortenApp_ShortenAppUITests {
   umbrella header "Pods-ShortenApp-ShortenAppUITests-umbrella.h"
 
   export *
