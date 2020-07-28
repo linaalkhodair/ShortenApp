@@ -132,6 +132,39 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		E9AA232724D02A3000623FB8 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E9D198C124BB1A1A00FAEE95 /* FirstViewController.swift */,
+				E9D198C324BB1A1A00FAEE95 /* SecondViewController.swift */,
+				E9AA231F24C97D1800623FB8 /* SettingsViewController.swift */,
+				E9D198F324BDB40900FAEE95 /* UtmCell.swift */,
+				E9D198F924C076AC00FAEE95 /* SnippetCell.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		E9AA232824D02A5200623FB8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E9D198EF24BD98C300FAEE95 /* Credentials.swift */,
+				E9D198F124BDA3D800FAEE95 /* Alert.swift */,
+				E9D198F524BDBC8000FAEE95 /* Utm.swift */,
+				E9D198F724BF7C5400FAEE95 /* SnippetList.swift */,
+				E9D198FB24C076D000FAEE95 /* Snippet.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E9AA232924D02A7600623FB8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E9AA232524D023F300623FB8 /* Main.storyboard */,
+				E9D198CA24BB1A1F00FAEE95 /* LaunchScreen.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E9D198B124BB1A1A00FAEE95 = {
 			isa = PBXGroup;
 			children = (
@@ -157,22 +190,13 @@
 		E9D198BC24BB1A1A00FAEE95 /* ShortenApp */ = {
 			isa = PBXGroup;
 			children = (
+				E9AA232824D02A5200623FB8 /* Models */,
+				E9AA232924D02A7600623FB8 /* Views */,
+				E9AA232724D02A3000623FB8 /* Controllers */,
 				E9D198BD24BB1A1A00FAEE95 /* AppDelegate.swift */,
 				E9D198BF24BB1A1A00FAEE95 /* SceneDelegate.swift */,
-				E9D198C124BB1A1A00FAEE95 /* FirstViewController.swift */,
-				E9D198C324BB1A1A00FAEE95 /* SecondViewController.swift */,
-				E9AA231F24C97D1800623FB8 /* SettingsViewController.swift */,
-				E9AA232524D023F300623FB8 /* Main.storyboard */,
 				E9D198C824BB1A1F00FAEE95 /* Assets.xcassets */,
-				E9D198CA24BB1A1F00FAEE95 /* LaunchScreen.storyboard */,
 				E9D198CD24BB1A1F00FAEE95 /* Info.plist */,
-				E9D198EF24BD98C300FAEE95 /* Credentials.swift */,
-				E9D198F124BDA3D800FAEE95 /* Alert.swift */,
-				E9D198F324BDB40900FAEE95 /* UtmCell.swift */,
-				E9D198F524BDBC8000FAEE95 /* Utm.swift */,
-				E9D198F724BF7C5400FAEE95 /* SnippetList.swift */,
-				E9D198F924C076AC00FAEE95 /* SnippetCell.swift */,
-				E9D198FB24C076D000FAEE95 /* Snippet.swift */,
 			);
 			path = ShortenApp;
 			sourceTree = "<group>";
