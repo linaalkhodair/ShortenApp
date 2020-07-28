@@ -15,8 +15,7 @@ class SnippetCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        snippetParameter.layer.cornerRadius = 15
-        snippetParameter.clipsToBounds = true 
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

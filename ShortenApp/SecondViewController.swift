@@ -39,6 +39,8 @@ class SecondViewController: UIViewController {
     
     let apiKey = UserDefaults.standard.string(forKey: "apiKey")
     let domainName = UserDefaults.standard.string(forKey: "domain")
+    @IBOutlet weak var saveBtn: UIButton!
+    @IBOutlet weak var extraView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +57,9 @@ class SecondViewController: UIViewController {
                 
         snippetPicker.dataSource = self
         snippetPicker.delegate = self
+        
+        saveBtn.isHidden = true
+        extraView.isHidden = true
         
     }
     
@@ -118,6 +123,8 @@ class SecondViewController: UIViewController {
             
             let aliasName = getAliasName(shortUrl: shortField.text!)
             getAlias(aliasName: aliasName)
+            extraView.isHidden = false
+            saveBtn.isHidden = false
         }
     }
     
