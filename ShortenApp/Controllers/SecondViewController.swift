@@ -159,7 +159,11 @@ class SecondViewController: UIViewController {
     //function that make a GET API request to getAlias details by sending the aliasName and the json reponse with details such as domain, dest url etc.
     func getAlias(aliasName: String){
         
-        var url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" //if domain not short, url must contain domainName ---TODO---
+        var url = "https://api.shorten.rest/aliases?domainName=\(domainName)?aliasName=\(aliasName)"
+        
+        if (domainName == "short.fyi") {
+            url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)"
+        }
         url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         var urlRequest = URLRequest(url: URL(string: url)!)
@@ -321,7 +325,12 @@ class SecondViewController: UIViewController {
         if (isUtm) {
             longUrl = addUtms(url: longUrl!)
         }
-        var url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" //if there is a domain name not short.fyi url is changed--TODO--
+        var url = "https://api.shorten.rest/aliases?domainName=\(domainName)?aliasName=\(aliasName)"
+        
+        if (domainName == "short.fyi"){
+             url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" 
+        }
+        
         url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         var urlRequest = URLRequest(url: URL(string: url)!)

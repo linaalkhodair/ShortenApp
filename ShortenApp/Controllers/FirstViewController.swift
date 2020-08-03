@@ -172,7 +172,12 @@ class FirstViewController: UIViewController {
         if (isUtm) {
             longUrl = addUtms(url: longUrl!)
         }
-        var url = "https://api.shorten.rest/aliases?aliasName=/@rnd"
+        //if domain name is not the defualt it must be added to the url :)
+        var url = "https://api.shorten.rest/aliases?domainName=\(domainName)?aliasName=/@rnd"
+        
+        if domainName == "short.fyi" {
+            url = "https://api.shorten.rest/aliases?aliasName=/@rnd"
+        }
         url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         var urlRequest = URLRequest(url: URL(string: url)!)
