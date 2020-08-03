@@ -16,7 +16,7 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.hideKeyboard()
         let api = UserDefaults.standard.string(forKey: "apiKey") ?? "Not set"
         
         if (api != "Not set") {

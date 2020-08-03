@@ -19,6 +19,7 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var utmParam: UITextField!
     @IBOutlet weak var utmValue: UITextField!
     @IBOutlet weak var utmTableView: UITableView!
+    @IBOutlet weak var utmHeight: NSLayoutConstraint!
     var isUtm: Bool = false //variable to check if utms has been added
     var utms: [Utm] = []
     
@@ -37,8 +38,8 @@ class SecondViewController: UIViewController {
 
     var aliasName: String = ""
     
-    let apiKey = UserDefaults.standard.string(forKey: "apiKey")
-    let domainName = UserDefaults.standard.string(forKey: "domain")
+    var apiKey = ""
+    var domainName = ""
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var extraView: UIView!
     
@@ -62,6 +63,19 @@ class SecondViewController: UIViewController {
         extraView.isHidden = true
         self.hideKeyboard()
         
+        if (UserDefaults.standard.string(forKey: "apiKey") != nil) {
+            apiKey = UserDefaults.standard.string(forKey: "apiKey")!
+            domainName = UserDefaults.standard.string(forKey: "domain")!
+        } else {
+            Alert.showBasicAlert(on: self, with: "An error occured", message: "Please complete settings by filling in your API Key.")
+        }
+
+        
+    } //end viewDidLoad
+    
+    override func viewWillLayoutSubviews() {
+        super.updateViewConstraints()
+        self.utmHeight?.constant = self.utmTableView.contentSize.height
     }
     
     @IBAction func addSnippet(_ sender: Any) {
@@ -133,9 +147,9 @@ class SecondViewController: UIViewController {
         var alias = shortUrl
         alias = alias.replacingOccurrences(of: "https://", with: "")
         print("ALIAS NAME:",aliasName)
-        var len = domainName?.count //check android version
+        var len = domainName.count //check android version
         
-        alias = alias.replacingOccurrences(of: domainName!+"/", with: "")
+        alias = alias.replacingOccurrences(of: domainName+"/", with: "")
         self.aliasName = alias
         return aliasName
         
@@ -148,7 +162,7 @@ class SecondViewController: UIViewController {
         
         var urlRequest = URLRequest(url: URL(string: url)!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue(apiKey!, forHTTPHeaderField: "x-api-key")
+        urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key")
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
@@ -305,7 +319,7 @@ class SecondViewController: UIViewController {
         
         var urlRequest = URLRequest(url: URL(string: url)!)
         urlRequest.httpMethod = "PUT"
-        urlRequest.addValue(apiKey!, forHTTPHeaderField: "x-api-key") //maybe set?
+        urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key") //maybe set?
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let result = getSnippetDict(longUrl: longUrl!)

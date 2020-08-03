@@ -25,6 +25,7 @@ class FirstViewController: UIViewController {
     @IBOutlet weak var plusSign: UIImageView!
     @IBOutlet weak var minusSign: UIImageView!
     @IBOutlet weak var extraViewHeader: UILabel!
+    @IBOutlet weak var utmHeight: NSLayoutConstraint!
     
     
     var isUtm: Bool = false //variable to check if utms has been added
@@ -42,8 +43,8 @@ class FirstViewController: UIViewController {
     
     var snippetList = SnippetList(ID: "", parameterExample: "")
     
-    let apiKey = UserDefaults.standard.string(forKey: "apiKey")
-    let domainName = UserDefaults.standard.string(forKey: "domain")
+    var apiKey: String = ""
+    var domainName: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +62,20 @@ class FirstViewController: UIViewController {
         extraView.isHidden = true //hidden
         self.hideKeyboard()
         
+        if (UserDefaults.standard.string(forKey: "apiKey") != nil) {
+            
+            apiKey = UserDefaults.standard.string(forKey: "apiKey")!
+            domainName = UserDefaults.standard.string(forKey: "domain")!
+        } else {
+            Alert.showBasicAlert(on: self, with: "An error occured", message: "Please complete settings by filling in your API Key.")
+        }
         
+
+    } //end viewDidLoad
+       
+    override func viewWillLayoutSubviews() {
+           super.updateViewConstraints()
+           self.utmHeight?.constant = self.utmTableView.contentSize.height
     }
 
     @IBAction func expandBtn(_ sender: Any) {
@@ -160,7 +174,7 @@ class FirstViewController: UIViewController {
             
             var urlRequest = URLRequest(url: URL(string: url)!)
             urlRequest.httpMethod = "POST"
-            urlRequest.addValue(apiKey!, forHTTPHeaderField: "x-api-key") //maybe set?
+            urlRequest.addValue(apiKey, forHTTPHeaderField: "x-api-key") //maybe set?
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
             let result = getSnippetDict(longUrl: longUrl!)
