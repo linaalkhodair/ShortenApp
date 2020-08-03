@@ -11,7 +11,7 @@ import SwiftyJSON
 import Toast_Swift
 
 class SecondViewController: UIViewController {
-
+    
     @IBOutlet weak var shortField: UITextField!
     @IBOutlet weak var destinationUrl: UITextField!
     @IBOutlet weak var domain: UITextField!
@@ -31,15 +31,16 @@ class SecondViewController: UIViewController {
     var snippetParameter: String = ""
     
     var snippets = ["Select Snippet","GoogleAnalytics", "FacebookPixel", "GoogleConversionPixel", "LinkedInPixel",
-    "AdrollPixel", "TaboolaPixel", "BingPixel", "PinterestPixel", "SnapchatPixel"
+                    "AdrollPixel", "TaboolaPixel", "BingPixel", "PinterestPixel", "SnapchatPixel"
     ]
     
     var snippetList = SnippetList(ID: "", parameterExample: "")
-
+    
     var aliasName: String = ""
     
     var apiKey = ""
     var domainName = ""
+    
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var extraView: UIView!
     
@@ -49,13 +50,11 @@ class SecondViewController: UIViewController {
         utmTableView.dataSource = self
         utmTableView.delegate = self
         utmTableView.tableFooterView = UIView(frame: CGRect.zero)
-                
+        
         snippetTableView.dataSource = self
         snippetTableView.delegate = self
         snippetTableView.tableFooterView = UIView(frame: CGRect.zero)
-        //        utmTableView.reloadData()
-        //        snippetTableView.reloadData()
-                
+        
         snippetPicker.dataSource = self
         snippetPicker.delegate = self
         
@@ -69,22 +68,22 @@ class SecondViewController: UIViewController {
         } else {
             Alert.showBasicAlert(on: self, with: "An error occured", message: "Please complete settings by filling in your API Key.")
         }
-
         
     } //end viewDidLoad
     
     override func viewWillLayoutSubviews() {
         super.updateViewConstraints()
         self.utmHeight?.constant = self.utmTableView.contentSize.height
-    }
+    }// end viewWillLayoutSubviews
     
     @IBAction func addSnippet(_ sender: Any) {
         isSnippet = true
         if (snippetId != "Select Snippet") {
-        insertSnippetRow()
+            insertSnippetRow()
         }
     }
     
+    //function that inserts a snippet based on the chosen tracking pixel to the tableview
     func insertSnippetRow(){
         
         let snippet = Snippet(snippetID: snippetId, parameterExample: snippetParameter)
@@ -95,13 +94,14 @@ class SecondViewController: UIViewController {
         snippetTableView.beginUpdates()
         snippetTableView.insertRows(at: [indexPath], with: .automatic)
         snippetTableView.endUpdates()
-
+        
         view.endEditing(true)
         
-    }
+    }// end insertSnippetRow
     
+    //function that inserts a utm row based on the entered fields to the tabelview
     func insertUtmRow() {
-            
+        
         let param = utmParam.text!
         let value = utmValue.text!
         var isValid = true
@@ -113,9 +113,9 @@ class SecondViewController: UIViewController {
         
         if isValid {
             
-        let utm = Utm(parameter: param, value: value)
-        utms.append(utm)
-        print("HERE!!!!",utms[0])
+            let utm = Utm(parameter: param, value: value)
+            utms.append(utm)
+            print("HERE!!!!",utms[0])
             
             let indexPath = IndexPath(row: utms.count - 1, section: 0)
             
@@ -128,8 +128,8 @@ class SecondViewController: UIViewController {
             view.endEditing(true)
             
         }
-    }
-
+    }// end insertUtmRow
+    
     @IBAction func searchBtnTapped(_ sender: Any) {
         //check not empty!
         if (shortField.text == "") {
@@ -143,6 +143,7 @@ class SecondViewController: UIViewController {
         }
     }
     
+    //function that extracts the aliasName from the short url entered by removing the domain name and the '/'
     func getAliasName(shortUrl: String) -> String {
         var alias = shortUrl
         alias = alias.replacingOccurrences(of: "https://", with: "")
@@ -153,8 +154,9 @@ class SecondViewController: UIViewController {
         self.aliasName = alias
         return aliasName
         
-    }
+    }// end getAliasName
     
+    //function that make a GET API request to getAlias details by sending the aliasName and the json reponse with details such as domain, dest url etc.
     func getAlias(aliasName: String){
         
         var url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" //if domain not short, url must contain domainName ---TODO---
@@ -184,9 +186,9 @@ class SecondViewController: UIViewController {
                     
                     self.displayErrorMessages(errorCode: json["errorCode"].int!, errorMsg: json["errorMessage"].string!)
                 }
-                
+                    
                 else {
-                
+                    
                     let destination = json["destinations"][0]["url"].string!
                     let domainName = json["domainName"].string!
                     let snippets = json["snippets"].array
@@ -197,9 +199,9 @@ class SecondViewController: UIViewController {
                     DispatchQueue.main.async {
                         self.destinationUrl.text = destination
                         self.domain.text = domainName
-                    
+                        
                     }
-                
+                    
                 }
                 
             } else {
@@ -212,20 +214,22 @@ class SecondViewController: UIViewController {
         
         task.resume()
         
-
-    }
+        
+    }// end getAlias
     
+    //function that displays an error alert incase an error occured when making the API request
     func displayErrorMessages(errorCode: Int, errorMsg: String){
         //maybe later i can create switch with  all error codes..
         Alert.showBasicAlert(on: self, with: "Something went wrong!", message: "\(errorMsg), please try again.")
         
-    }
+    }// end displayErrorMessages
     
     @IBAction func copyTapped(_ sender: Any) {
         UIPasteboard.general.string = shortField.text
         self.view.makeToast("Short URL is copied to clipboard.")
     }
     
+    //function that extracts utms embedded in the destination url in order to display them, then removes them from the url for a clean start when trying to edit the short url
     func getUtms(url: String) {
         let url = URL(string: url)!
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
@@ -234,9 +238,9 @@ class SecondViewController: UIViewController {
         let queryItems = components!.queryItems
         //we have a problem when the url is from the extension :/
         if queryItems != nil {
-        for queryItem in queryItems! {
-            let utm = Utm(parameter: queryItem.name, value: queryItem.value!)
-            insertUtmRow(utm: utm)
+            for queryItem in queryItems! {
+                let utm = Utm(parameter: queryItem.name, value: queryItem.value!)
+                insertUtmRow(utm: utm)
             }
         }
         //remove all url components so when we save changes we start in clean slate lol
@@ -245,29 +249,32 @@ class SecondViewController: UIViewController {
             self.destinationUrl.text = components?.url?.absoluteString
             print("NEW DESTINATION->",self.destinationUrl.text)
         }
-    }
+        
+    } //end getUtms
     
+    //function that inserts a utm row for the utms that are already embedded in the url by reciving the Utm object
     func insertUtmRow(utm: Utm) {
-    
+        
         utms.append(utm)
         print("HERE!!!!",utms[0])
-            
-            let indexPath = IndexPath(row: utms.count - 1, section: 0)
-            
+        
+        let indexPath = IndexPath(row: utms.count - 1, section: 0)
+        
         DispatchQueue.main.async {
             self.utmTableView.beginUpdates()
             self.utmTableView.insertRows(at: [indexPath], with: .automatic)
             self.utmTableView.endUpdates()
             self.view.endEditing(true)
         }
-
-    }
+        
+    } //end insertUtmRow
     
     @IBAction func addUtm(_ sender: Any) {
         isUtm = true
         insertUtmRow()
     }
     
+    //function that extracts snippets that are already embedded in the url in order to display them
     func getSnippets(snippetsArray: [JSON]) {
         DispatchQueue.main.async {
             self.snippetTableView.beginUpdates()
@@ -283,9 +290,9 @@ class SecondViewController: UIViewController {
         }
         //delete all snippets from url so we add them when updating from snippetscells
         
-        
-    }
+    }// end getSnippets
     
+    //function that inserts a snippet row for the snippets that already exist in the url by reciving the Snippet object
     func insertSnippetRow(snippet: Snippet){
         
         snippetCells.append(snippet)
@@ -296,18 +303,18 @@ class SecondViewController: UIViewController {
             self.snippetTableView.beginUpdates()
             self.snippetTableView.insertRows(at: [indexPath], with: .automatic)
             self.snippetTableView.endUpdates()
-
+            
             self.view.endEditing(true)
         }
-
         
-    }
+    } //end insertSnippetRow
     
     
     @IBAction func saveBtnTapped(_ sender: Any) {
         editAlias(aliasName: aliasName)
     }
     
+    //function that edits the short url by updating either destination url, domain, snippets, etc by making a 'PUT' API request and sending updates int he request body
     func editAlias(aliasName: String) {
         
         var longUrl = destinationUrl.text
@@ -345,7 +352,7 @@ class SecondViewController: UIViewController {
                     print("new json",json)
                     self.displayErrorMessages(errorCode: json["errorCode"].int!, errorMsg: json["errorMessage"].string!)
                 }
-                
+                    
                 else {
                     //toast
                     DispatchQueue.main.async {
@@ -363,8 +370,9 @@ class SecondViewController: UIViewController {
         
         task.resume()
         
-    }
-
+    } // end editAlias
+    
+    //function that adds utms to the url by going through utms added in the tableview and attaching them to the url
     func addUtms(url: String) -> String {
         
         var queryItems: [URLQueryItem] = []
@@ -380,8 +388,9 @@ class SecondViewController: UIViewController {
         
         return result!.absoluteString
         
-    }
-
+    }// end addUtms
+    
+    //function that return a dictionary of all snippets added in order  to add them to url when making edits by going through snippets added in the tableview
     func getSnippetDict(longUrl: String) -> [String : [Any]] {
         
         var parameter = [
@@ -393,12 +402,12 @@ class SecondViewController: UIViewController {
                     "os": ""
                 ]
             ]
-        ,
+            ,
             "snippets": [
-
-               ]
-
-        ] as  [String : [[String : Any]]]
+                
+            ]
+            
+            ] as  [String : [[String : Any]]]
         var array = [Dictionary<String, Any>]()
         
         for snippet in snippetCells {
@@ -407,30 +416,31 @@ class SecondViewController: UIViewController {
             cleanParam = cleanParam.replacingOccurrences(of: "}", with: "")
             cleanParam = cleanParam.replacingOccurrences(of: "\n", with: "")
             cleanParam = cleanParam.replacingOccurrences(of: "\"", with: "")
-        
-        let components = cleanParam.components(separatedBy: ",")
-
-        var dictionary: [String : String] = [:]
-         var dict = [
-            "id": snippet.snippetID,
-            "parameters": [
             
-            ]
-            ] as [String : Any]
-        for component in components{
-          let pair = component.components(separatedBy: ":")
-          dictionary[pair[0]] = pair[1]
+            let components = cleanParam.components(separatedBy: ",")
             
-        }
+            var dictionary: [String : String] = [:]
+            var dict = [
+                "id": snippet.snippetID,
+                "parameters": [
+                    
+                ]
+                ] as [String : Any]
+            for component in components{
+                let pair = component.components(separatedBy: ":")
+                dictionary[pair[0]] = pair[1]
+                
+            }
             dict["parameters"] = dictionary
             array.append(dict)
-
+            
             
         } //end for loop
         parameter["snippets"] = array
         print("INSIDE->",parameter)
         return parameter
-    }
+        
+    } // end getSnippetDict
     
 } //end SecondViewController
 
@@ -457,7 +467,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         switch tableView {
         case utmTableView:
             let utm = utms[indexPath.row]
-
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "UtmCell") as! UtmCell
             cell.paramField.text = utm.parameter
             cell.valueField.text = utm.value
@@ -469,11 +479,11 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             cell.snippetId.text = snippet.snippetID
             cell.snippetParameter.text = snippet.parameterExample
             return cell
-        
+            
         default:
             return UITableViewCell()
         }
-
+        
         return UITableViewCell()
     }
     
@@ -496,7 +506,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
                 utmTableView.beginUpdates()
                 utmTableView.deleteRows(at: [indexPath], with: .automatic)
                 utmTableView.endUpdates()
-            
+                
             case snippetTableView:
                 snippetCells.remove(at: indexPath.row) //anther table view
                 
@@ -506,31 +516,31 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             default: break
                 
             } //end switch
-
+            
         } //end if
     }
 }
 
 extension SecondViewController: UIPickerViewDataSource, UIPickerViewDelegate {
-func numberOfComponents(in pickerView: UIPickerView) -> Int {
-    return 1 //number of columns
-}
-
-func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-    return snippets.count
-}
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1 //number of columns
+    }
     
-func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-    return snippets[row]
-}
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return snippets.count
+    }
     
-func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return snippets[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print("selected::::",snippets[row])
         let parameterExample = snippetList.getParameterExample(ID: snippets[row])
-    
+        
         snippetId = snippets[row]
         snippetParameter = parameterExample
-}
-
+    }
+    
 }
 

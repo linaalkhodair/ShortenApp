@@ -24,9 +24,9 @@ class SettingsViewController: UIViewController {
             domainField.text = UserDefaults.standard.string(forKey: "domain")
         }
         
-    }
+    } //end viewDidLoad
     
-
+    
     @IBAction func saveBtnTapped(_ sender: Any) {
         
         let apiKey = apiKeyField.text
@@ -38,11 +38,12 @@ class SettingsViewController: UIViewController {
             if (domain!.isEmpty){
                 domain = "short.fyi"
             }
-        saveUserCredentials(apiKey: apiKey!, domain: domain!)
+            saveUserCredentials(apiKey: apiKey!, domain: domain!)
         }
         
     }
     
+    //function that adds user's domain, api key to UserDefaults to save them across all app
     func saveUserCredentials(apiKey: String, domain: String) {
         
         UserDefaults.standard.set(apiKey, forKey: "apiKey")
@@ -52,6 +53,6 @@ class SettingsViewController: UIViewController {
         }
         
         
-    }
+    }// end saveUserCredentials
     
-}
+} // end SettingsViewController
