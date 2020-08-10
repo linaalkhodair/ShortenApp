@@ -286,7 +286,9 @@ class SecondViewController: UIViewController {
         for snippet in snippetsArray {
             let id = snippet["id"].string!
             let parameters = snippet["parameters"].dictionary
-            let resultSnip = Snippet(snippetID: id, parameterExample: parameters!.description)
+            var newParameters = parameters?.description.replacingOccurrences(of: "[", with: "{")
+            newParameters = newParameters?.replacingOccurrences(of: "]", with: "}")
+            let resultSnip = Snippet(snippetID: id, parameterExample: newParameters!)
             insertSnippetRow(snippet: resultSnip)
         }
         DispatchQueue.main.async {
@@ -328,7 +330,7 @@ class SecondViewController: UIViewController {
         var url = "https://api.shorten.rest/aliases?domainName=\(domainName)?aliasName=\(aliasName)"
         
         if (domainName == "short.fyi"){
-             url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)" 
+             url = "https://api.shorten.rest/aliases?aliasName=\(aliasName)"
         }
         
         url = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!

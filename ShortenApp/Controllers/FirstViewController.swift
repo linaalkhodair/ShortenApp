@@ -59,6 +59,7 @@ class FirstViewController: UIViewController {
         snippetPicker.dataSource = self
         snippetPicker.delegate = self
         
+        
         extraView.isHidden = true //hidden
         self.hideKeyboard()
         
@@ -423,3 +424,4 @@ extension UIViewController{
         view.endEditing(true)
     }
 }
+
