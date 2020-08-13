@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import Toast_Swift
 
-class FirstViewController: UIViewController {
+class FirstViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var destinationUrl: UITextField!
     @IBOutlet weak var shortURL: UITextField!
@@ -313,6 +313,23 @@ class FirstViewController: UIViewController {
         Alert.showBasicAlert(on: self, with: "Something went wrong!", message: "\(errorMsg), please try again.")
     } //end displayErrorMessages
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("TextField did end editing method called")
+        snippetParameter = textField.text!
+
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        print("return works:D")
+        snippetParameter = textField.text!
+        return true
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("TextField did begin editing method called")
+    }
+    
 } //end FirstViewController
 
 extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
@@ -349,6 +366,8 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "snippetCell") as! SnippetCell
             cell.snippetId.text = snippet.snippetID
             cell.snippetParameter.text = snippet.parameterExample
+            
+            cell.snippetParameter.delegate = self
             return cell
             
         default:
@@ -389,6 +408,8 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             } //end switch
             
         } //end if
+        
+      
     }
 }
 

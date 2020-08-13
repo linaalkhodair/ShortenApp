@@ -19,7 +19,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SpD-iL-ND1">
-                                        <rect key="frame" x="0.0" y="1" width="414" height="812"/>
+                                        <rect key="frame" x="0.0" y="1.3333333333333144" width="414" height="811.66666666666674"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Destination URL:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbq-kT-eNp">
                                                 <rect key="frame" x="19.666666666666671" y="52" width="157" height="27"/>
@@ -223,8 +223,8 @@
                                                             </tableViewCell>
                                                         </prototypes>
                                                     </tableView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tracking Pixels:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lqa-Ec-1au">
-                                                        <rect key="frame" x="22" y="236" width="156" height="27"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tracking Pixels:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lqa-Ec-1au">
+                                                        <rect key="frame" x="20" y="236" width="156" height="27"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="156" id="KKW-Ed-X6b"/>
                                                             <constraint firstAttribute="width" secondItem="Lqa-Ec-1au" secondAttribute="height" multiplier="52:9" id="WA6-5r-H2c"/>
@@ -234,8 +234,8 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UTM:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yB0-AI-PNZ">
-                                                        <rect key="frame" x="22" y="7.9999999999999982" width="100" height="27.333333333333329"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="UTM:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yB0-AI-PNZ">
+                                                        <rect key="frame" x="20" y="7.9999999999999432" width="100" height="27.333333333333329"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="100" id="8Bb-cn-YRU"/>
                                                         </constraints>
@@ -285,12 +285,15 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="374" height="105"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
-                                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="{\n \&quot;id\&quot;: \&quot;YOUR_ID\&quot;,\n \&quot;event\&quot;: \&quot;EVENT_NAME\&quot;\n }" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="e3b-ND-tKf">
+                                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" text="{\n \&quot;id\&quot;: \&quot;YOUR_ID\&quot;,\n \&quot;event\&quot;: \&quot;EVENT_NAME\&quot;\n }" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="e3b-ND-tKf">
                                                                             <rect key="frame" x="18" y="23" width="341" height="70"/>
                                                                             <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="13"/>
-                                                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                                            <connections>
+                                                                                <outlet property="delegate" destination="2iC-8a-mfZ" id="ilC-9M-U2A"/>
+                                                                            </connections>
                                                                         </textView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Snippet ID:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uvV-pw-qEa">
                                                                             <rect key="frame" x="18" y="0.0" width="106" height="27"/>
@@ -318,6 +321,9 @@
                                                                 </connections>
                                                             </tableViewCell>
                                                         </prototypes>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="2iC-8a-mfZ" id="UsK-5E-gdy"/>
+                                                        </connections>
                                                     </tableView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -416,7 +422,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="czT-Kb-dKJ"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Shorten URL" image="scissors" catalog="system" id="Mnw-7M-2wt"/>
+                    <tabBarItem key="tabBarItem" title="Shorten URL" image="link" catalog="system" id="Mnw-7M-2wt"/>
                     <navigationItem key="navigationItem" id="cxi-kP-tZr"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -568,7 +574,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Copy short URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jpA-tp-L3G">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter short URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jpA-tp-L3G">
                                 <rect key="frame" x="19" y="91" width="337" height="40"/>
                                 <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -955,11 +961,11 @@
         <image name="buttonBackground" width="150" height="50"/>
         <image name="doc.on.clipboard" catalog="system" width="117" height="128"/>
         <image name="gear" catalog="system" width="128" height="119"/>
+        <image name="link" catalog="system" width="128" height="116"/>
         <image name="logo" width="1080" height="254"/>
         <image name="minus" catalog="system" width="128" height="24"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.circle" catalog="system" width="128" height="121"/>
-        <image name="scissors" catalog="system" width="128" height="92"/>
     </resources>
 </document>
